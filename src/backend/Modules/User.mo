@@ -7,9 +7,9 @@ module {
   public class UserManager() {
     let userList = HashMap.HashMap<Principal, Types.User>(0, Principal.equal, Principal.hash);
 
-    public func registerUser(caller: Principal.Principal, name: Text, isArtist: Bool) {
+    public func registerUser(caller: Principal.Principal, name: Text) {
       let user: Types.User = {
-        isArtist = isArtist;
+        
         name = name;
       };
       userList.put(caller, user);

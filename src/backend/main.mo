@@ -23,8 +23,8 @@ actor {
     return #ok(nameManager.getNames());
   };
 
-  public shared ({caller}) func registerUser(name: Text, isArtist: Bool) : async () {
-    userManager.registerUser(caller, name, isArtist);
+  public shared ({caller}) func registerUser(name: Text) : async () {
+    userManager.registerUser(caller, name);
   };
 
   public query func getUserById(id: Principal.Principal): async ?Types.User {

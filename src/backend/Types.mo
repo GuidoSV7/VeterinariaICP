@@ -14,7 +14,6 @@ module {
   };
 
   public type User = {
-    isArtist : Bool;
     name : Text;
   };
 }
