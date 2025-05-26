@@ -1,16 +1,20 @@
-import Name "Modules/Name";
-import NFT "Modules/NFT";
-import User "Modules/User";
+
 import Types "Types";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
+import Debug "mo:base/Debug";
 
+import Pet "Modules/Pet";
+import Name "Modules/Name";
+import NFT "Modules/NFT";
+import User "Modules/User";
 actor {
 
   //Esto lo entendí como Inyeccion 
   let nameManager = Name.NameManager();
   let userManager = User.UserManager();
   let nftManager = NFT.NFTManager();
+  let petManager = Pet.PetManager();
 
   public shared ({caller}) func addName(name: Text): async Name.AddNameResult {
     if (Principal.isAnonymous(caller)) return #err("You must be authenticated to add a name");
@@ -28,6 +32,7 @@ actor {
   };
 
   public query func getUserById(id: Principal.Principal): async ?Types.User {
+    
     userManager.getUserById(id);
   };
 
@@ -35,15 +40,31 @@ actor {
     nftManager.createNFT(caller, name, description, imageUrl, price);
   };
 
-  public query func getNFTById(id: Nat): async ?Types.Nft {
-    nftManager.getNFTById(id);
+
+
+  public shared query func getAllPets(): async [Types.Pet] {
+    petManager.getAllPets()
   };
 
-  public query func getAllNFfts(): async [Types.Nft] {
-    nftManager.getAllNFTs();
+  public shared ({caller}) func registerPet(name: Text, age: Nat): async Types.Result<Text> {
+    if (Principal.isAnonymous(caller)) {
+        return #unauthorized;  
+    };
+    
+    petManager.registerPet(caller, name, age);
+    return #ok("Mascota registrada correctamente");
+  };
+  
+  public shared query func getPetByOwner(owner: Principal): async [Types.Pet] {
+    if (Principal.isAnonymous(owner)) {
+        return [];
+    };
+    
+    return petManager.getPetsByOwner(owner);
+
+    
+    
   };
 
-  public func updatedOwner(id: Nat, newOwner: Principal.Principal) : async () {
-    nftManager.updatedOwner(id, newOwner);
-  };
+  
 }
