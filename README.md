@@ -1,76 +1,145 @@
-# ICP Create React App - Backend Integration
+# VeterinariaICP 🐾
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Sistema de gestión veterinaria descentralizado construido en Internet Computer Protocol (ICP) para el manejo de carnets de mascotas y validación de vacunas.
 
-## Getting Started
+## 📋 Descripción
 
-To get started, follow these steps:
+VeterinariaICP es una aplicación descentralizada que permite a las veterinarias gestionar de forma segura y transparente los carnets de salud de las mascotas, incluyendo el registro y validación de vacunas. Utiliza la blockchain de Internet Computer para garantizar la inmutabilidad y veracidad de los registros médicos veterinarios.
 
-Install frontend dependencies by running the following command in your terminal:
+## ✨ Características
 
+- 🏥 **Gestión de Veterinarias**: Registro y administración de clínicas veterinarias
+- 🐕 **Carnets de Mascotas**: Creación y mantenimiento de historiales médicos digitales
+- 💉 **Control de Vacunas**: Registro, seguimiento y validación de vacunas aplicadas
+- 🔐 **Autenticación Segura**: Integración con Internet Identity para acceso seguro
+- 📱 **Interfaz Responsive**: Diseño adaptable para dispositivos móviles y desktop
+- 🌐 **Descentralizado**: Almacenamiento seguro en la blockchain de ICP
+
+## 🚀 Comenzando
+
+### Prerrequisitos
+
+- Node.js (versión 16 o superior)
+- DFX SDK instalado
+- Git
+
+### Instalación
+
+1. **Clona el repositorio**
+   ```bash
+   git clone https://github.com/GuidoSV7/VeterinariaICP.git
+   cd VeterinariaICP
+   ```
+
+2. **Instala las dependencias del frontend**
+   ```bash
+   cd src/frontend
+   npm install
+   cd ../..
+   ```
+
+3. **Inicia la réplica local de ICP**
+   ```bash
+   dfx start --background --clean
+   ```
+
+4. **Despliega Internet Identity**
+   ```bash
+   dfx deploy internet_identity
+   ```
+
+5. **Despliega el backend**
+   ```bash
+   dfx deploy backend
+   ```
+
+6. **Genera los archivos de declaración**
+   ```bash
+   dfx generate backend
+   ```
+
+7. **Configura las variables de entorno**
+   ```bash
+   cp .env-example .env
+   ```
+   
+   Edita el archivo `.env` y actualiza:
+   - `REACT_APP_INTERNET_COMPUTER_PROVIDER` con la URL de Internet Identity
+   - `REACT_APP_BACKEND_CANISTER_ID` con el ID del canister backend
+
+8. **Ejecuta la aplicación en modo desarrollo**
+   ```bash
+   npm run start
+   ```
+
+## 🛠️ Comandos Útiles
+
+### Desarrollo
 ```bash
-cd src/frontend
-npm install
-cd ../..
+# Iniciar en modo desarrollo
+npm run start
+
+# Ejecutar tests
+npm test
+
+# Build de producción
+npm run build
 ```
 
-Run a replica of ICP by executing the following command:
-
+### Despliegue
 ```bash
-dfx start --background --clean
-```
+# Desplegar todo el proyecto
+dfx deploy
 
-Deploy the Internet Identity canister:
+# Desplegar solo el frontend
+dfx deploy frontend
 
-```bash
-dfx deploy internet_identity
-```
-
-You should see the following output in your terminal:
-
-```bash
-Deployed canisters.
-URLs:
-    Frontend canister via browser
-        internet_identity:
-            - http://127.0.0.1:4943/?canisterId=bkyz2-fmaaa-aaaaa-qaaaq-cai
-            - http://bkyz2-fmaaa-aaaaa-qaaaq-cai.localhost:4943/
-    Backend canister via Candid interface:
-        internet_identity: http://127.0.0.1:4943/?canisterId=bd3sg-teaaa-aaaaa-qaaba-cai&id=bkyz2-fmaaa-aaaaa-qaaaq-cai
-```
-
-Deploy the Backend canister:
-
-```bash
+# Desplegar solo el backend
 dfx deploy backend
 ```
 
-Generate declaration files:
-
+### Utilidades
 ```bash
-dfx generate backend
+# Ver logs del canister
+dfx canister logs backend
+
+# Obtener ID de canister
+dfx canister id backend
+
+# Estado de los canisters
+dfx canister status --all
 ```
 
-Copy the `.env-example` file and rename the copy to `.env`
+## 🔧 Tecnologías Utilizadas
 
-Replace the value of `REACT_APP_INTERNET_COMPUTER_PROVIDER` with the URL obtained from `dfx deploy internet_identity`. For example: `http://bkyz2-fmaaa-aaaaa-qaaaq-cai.localhost:4943/`
+- **Frontend**: React.js, CSS Modules, JavaScript
+- **Backend**: Motoko/Rust (ICP Canisters)
+- **Blockchain**: Internet Computer Protocol (ICP)
+- **Autenticación**: Internet Identity
+- **Herramientas**: DFX SDK, Node.js, npm
 
-Replace the value of `REACT_APP_BACKEND_CANISTER_ID` with the value obtained from `dfx canister id backend`. The value should look like: `ryjl3-tyaaa-aaaaa-aaaba-cai`
+## 🐾 Funcionalidades Específicas
 
-Run the application in developer mode:
+### Para Veterinarios
+- Registro de nuevas mascotas en el sistema
+- Actualización de historiales médicos
+- Aplicación y registro de vacunas
+- Generación de reportes de salud
 
-```bash
-npm run start
-```
+### Para Propietarios
+- Visualización del carnet digital de su mascota
+- Historial completo de vacunas y tratamientos
+- Verificación de autenticidad de registros
+- Acceso desde cualquier dispositivo
 
-To run the application in production mode, execute the following command:
+### Para el Sistema
+- Validación automática de fechas de vacunación
+- Alertas de vacunas próximas a vencer
+- Trazabilidad completa de todos los registros
+- Backup automático en blockchain
 
-```bash
-dfx deploy frontend
-```
-# VeterinariaICP
-# VeterinariaICP
-# VeterinariaICP
-# VeterinariaICP
-# VeterinariaICP
-# VeterinariaICP
+---
+
+⭐ ¡No olvides dar una estrella al proyecto si te fue útil!
+
+🐕 Hecho con ❤️ para el bienestar de nuestras mascotas
