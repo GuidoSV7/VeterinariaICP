@@ -14,7 +14,8 @@
     "pretest": "npm run prebuild --workspaces --if-present",
     "start": "npm start --workspaces --if-present",
     "test": "npm test --workspaces --if-present",
-    "restart": "dfx stop && dfx start --background --clean && sleep 5 && dfx deploy backend && dfx deploy internet_identity",
-    "dev": "dfx stop && dfx start --background --clean && sleep 5 && dfx deploy backend && dfx deploy frontend && dfx deploy internet_identity"
+    "restart": "dfx stop && dfx start --background --clean && sleep 5 && dfx deploy internet_identity && dfx deploy backend ",
+    "dev": "dfx stop && dfx start --background --clean && sleep 5 && dfx deploy ",
+    "dev frontend": "cd src/frontend && npm run dev"
   }
 }
