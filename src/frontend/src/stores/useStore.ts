@@ -34,7 +34,9 @@ const initialState: State = {
   authClient: null,
 };
 
-const BACKEND_CANISTER_ID = "uxrrr-q7777-77774-qaaaq-cai";
+const BACKEND_CANISTER_ID = process.env.REACT_APP_BACKEND_CANISTER_ID || "null";
+
+
 
 
 const useStore = create<Store>((set, get) => ({
@@ -74,7 +76,7 @@ const useStore = create<Store>((set, get) => ({
     }
 
     try {
-      const identityProviderUrl = 'http://uzt4z-lp777-77774-qaabq-cai.localhost:4943/ ';
+      const identityProviderUrl = process.env.REACT_APP_IDENTITY_PROVIDER_URL || "null";
 
       await new Promise<void>((resolve, reject) => {
         authClient.login({
