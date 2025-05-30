@@ -3,7 +3,7 @@
 }
 
 .App-logo {
-  height: 40px;
+  height: 8vmin;
   pointer-events: none;
 }
 
@@ -15,12 +15,45 @@
 
 .App-header {
   background-color: #282c34;
+  padding: 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
-  font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.main-nav {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.main-nav .nav-link {
+  color: white;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.main-nav .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.welcome {
+  padding: 40px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.welcome h1 {
+  color: #282c34;
+  margin-bottom: 20px;
+}
+
+.welcome p {
+  color: #666;
+  font-size: 1.1em;
 }
 
 @keyframes App-logo-spin {

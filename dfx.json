@@ -3,11 +3,7 @@
 
     "backend": {
       "type": "motoko",
-      "main": "src/backend/main.mo",
-      "declarations": {
-        "node_compatibility": false,
-        "output": "src/frontend/src/declarations/backend"
-      }
+      "main": "src/backend/main.mo"
     },
     "frontend": {
       "type": "assets",
