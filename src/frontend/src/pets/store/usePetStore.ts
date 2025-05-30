@@ -61,7 +61,7 @@ export const usePetStore = create<PetStore>((set: State['set'], get: State['get'
             const authClient = await AuthClient.create();
             const identity = await authClient.getIdentity();
             const principal = identity.getPrincipal();
-            const pets = await backend.getPetsByOwner(principal);
+            const pets = await backend.getPetByOwner(principal);
             set({ pets, loading: false });
         } catch (error) {
             set({ 

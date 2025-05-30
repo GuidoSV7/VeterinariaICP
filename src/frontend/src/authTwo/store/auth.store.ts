@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { devtools, persist } from "zustand/middleware";
 
-import { canisterId, createActor } from '../../../../declarations/backend';
+import { canisterId, createActor } from '../../declarations/backend';
 import { AuthClient } from '@dfinity/auth-client';
 import { HttpAgent } from '@dfinity/agent';
 
@@ -18,7 +18,7 @@ type AuthStore = {
   
 }
 
-const enviroment = process.env.DFX_NETWORK === 'local'
+const enviroment = 'local' === 'local'
 const localhost = "http://localhost:4943"
 const productionHost = "https://ic0.app"
 
@@ -35,6 +35,7 @@ export const useAuthStore = create<AuthStore>()(devtools((set, get) => ({
   initAuth: async () => { 
     const authClient = await AuthClient.create();
     const { handleAuthenticated } = get(); 
+
 
     if(await authClient.isAuthenticated()) {
       handleAuthenticated(authClient);
@@ -55,7 +56,7 @@ export const useAuthStore = create<AuthStore>()(devtools((set, get) => ({
       host: enviroment? localhost : productionHost,
     })
 
-    const actor = createActor(canisterId, {
+    const actor = createActor("uxrrr-q7777-77774-qaaaq-cai", {
       agent,
     })
     
@@ -68,13 +69,17 @@ export const useAuthStore = create<AuthStore>()(devtools((set, get) => ({
   },
 
   login : async () => {
+    console.log('🚀 Login attempt:');
+    console.log('- Environment:', enviroment);
     const authClient = await AuthClient.create();
     await authClient.login({
       maxTimeToLive: BigInt(7 * 24 * 60 * 1000 * 1000 * 1000),
-      identityProvider: enviroment ? `htpps://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/` : 'https://identity.ic0.app',
+      
+      identityProvider: enviroment ? `http://uzt4z-lp777-77774-qaabq-cai.localhost:4943/` : 'https://identity.ic0.app',
       onSuccess: () => {
         const { handleAuthenticated } = get();
         handleAuthenticated(authClient);
+        console.log(authClient.getIdentity().getPrincipal().toText());
 
             set((state) => ({
               log: true

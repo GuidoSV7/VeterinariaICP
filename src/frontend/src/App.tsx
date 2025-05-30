@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
-import LoginButton from './auth/components/LoginButton';
-import LogoutButton from './auth/components/LogoutButton';
+import LoginButton from './authTwo/components/LoginButton';
+import LogoutButton from './authTwo/components/LogoutButton';
 import PetsModule from './pets/PetsModule';
 import logo from './logo.svg';
 import './App.css';
@@ -11,15 +11,13 @@ const App: FC = () => {
 
   const { 
     initAuth, 
-    authClient, 
-    actor,
     log
 
    } = useAuthStore();
 
   useEffect(() => {
     initAuth();
-  }, [initAuth]);
+  }, []);
 
 
   return (
@@ -31,7 +29,7 @@ const App: FC = () => {
             <Link to="/" className="nav-link">Inicio</Link>
             <Link to="/pets" className="nav-link">Mascotas</Link>
           </nav>
-          {log ? <LogoutButton /> : <LoginButton />}
+          {log ?  <LoginButton /> : <LogoutButton />}
         </header>
 
         <main>

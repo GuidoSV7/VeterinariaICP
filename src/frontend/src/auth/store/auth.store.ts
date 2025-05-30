@@ -1,9 +1,9 @@
 import { create } from 'zustand';
-import { createActor } from '../../../..//declarations/backend';
+import { createActor } from '../../declarations/backend';
 import { AuthClient } from '@dfinity/auth-client';
 import { Identity } from '@dfinity/agent';
 import { ActorSubclass } from '@dfinity/agent';
-import { _SERVICE } from '../../../..//declarations/backend/backend.did';
+import { _SERVICE } from '../../declarations/backend/backend.did';
 
 interface State {
   isAuthenticated: boolean;

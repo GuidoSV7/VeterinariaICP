@@ -29,7 +29,7 @@ module {
         };
     
         
-        public func getPetsByOwner(owner: Principal): [Types.Pet] {
+        public func getPetByOwner(owner: Principal): [Types.Pet] {
             let ownerPets = Buffer.Buffer<Types.Pet>(0);
             for (pet in petList.vals()) {
                 if (Principal.equal(pet.owner, owner)) {

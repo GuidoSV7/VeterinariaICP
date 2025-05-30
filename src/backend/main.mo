@@ -60,7 +60,7 @@ actor {
         return [];
     };
     
-    return petManager.getPetsByOwner(owner);
+    return petManager.getPetByOwner(owner);
 
     
     
