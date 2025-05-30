@@ -5,10 +5,6 @@ import LogoutButton from './auth/components/LogoutButton';
 import PetsModule from './pets/PetsModule';
 import logo from './logo.svg';
 import './App.css';
-
-import { createActor } from '../../declarations/backend';
-import { AuthClient } from '@dfinity/auth-client';
-import { HttpAgent } from '@dfinity/agent';
 import { useAuthStore } from 'authTwo/store/auth.store';
 
 const App: FC = () => {
@@ -21,6 +17,10 @@ const App: FC = () => {
 
    } = useAuthStore();
 
+  useEffect(() => {
+    initAuth();
+  }, [initAuth]);
+
 
   return (
     <Router>
@@ -31,26 +31,26 @@ const App: FC = () => {
             <Link to="/" className="nav-link">Inicio</Link>
             <Link to="/pets" className="nav-link">Mascotas</Link>
           </nav>
-          {/* {isAuthenticated ? <LogoutButton /> : <LoginButton />} */}
+          {log ? <LogoutButton /> : <LoginButton />}
         </header>
 
         <main>
           <Routes>
-            {/* <Route path="/" element={
+            <Route path="/" element={
               <div className="welcome">
                 <h1>Bienvenido a la Veterinaria ICP</h1>
-                {!isAuthenticated && <p>Por favor, inicia sesión para acceder a todas las funcionalidades.</p>}
+                {!log && <p>Por favor, inicia sesión para acceder a todas las funcionalidades.</p>}
               </div>
             } />
             
             <Route 
               path="/pets/*" 
               element={
-                isAuthenticated ? 
+                log ? 
                 <PetsModule /> : 
                 <Navigate to="/" replace />
               } 
-            /> */}
+            />
           </Routes>
         </main>
       </div>

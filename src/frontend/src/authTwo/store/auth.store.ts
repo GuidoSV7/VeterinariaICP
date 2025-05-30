@@ -13,6 +13,8 @@ type AuthStore = {
   actor: any | null;
   initAuth: () => Promise<void>;
   handleAuthenticated: (authClient: AuthClient) => void;
+  login: () => Promise<void>;
+  logout: () => Promise<void>;
   
 }
 
@@ -65,7 +67,27 @@ export const useAuthStore = create<AuthStore>()(devtools((set, get) => ({
 
   },
 
-  Logout: async () => {
+  login : async () => {
+    const authClient = await AuthClient.create();
+    await authClient.login({
+      maxTimeToLive: BigInt(7 * 24 * 60 * 1000 * 1000 * 1000),
+      identityProvider: enviroment ? `htpps://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/` : 'https://identity.ic0.app',
+      onSuccess: () => {
+        const { handleAuthenticated } = get();
+        handleAuthenticated(authClient);
+
+            set((state) => ({
+              log: true
+ 
+            }))
+
+      }
+    })
+  }
+
+  ,
+
+  logout: async () => {
     const { authClient } = get();
     if (authClient) {
       await authClient.logout();
