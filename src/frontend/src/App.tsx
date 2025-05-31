@@ -23,16 +23,17 @@ const App: FC = () => {
   return (
     <Router>
       <div className="App">
-        <header className="App-header">
+        <header className="App-header ">
           <img src={logo} className="App-logo" alt="logo" />
           <nav className="main-nav">
             <Link to="/" className="nav-link">Inicio</Link>
             <Link to="/pets" className="nav-link">Mascotas</Link>
           </nav>
-          {log ?  <LoginButton /> : <LogoutButton />}
+          {log ?   <LogoutButton /> : <LoginButton />} 
         </header>
 
         <main>
+          
           <Routes>
             <Route path="/" element={
               <div className="welcome">

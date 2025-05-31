@@ -1,106 +1,92 @@
-import React, { useState, useEffect, FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+
 import { usePetStore } from '../store/usePetStore';
-import useStore from '../../auth/store/auth.store';
+import {useForm} from 'react-hook-form';
+import { Pet } from 'pets/types/Pet';
+import Error from './Error';
 
-const RegisterPet: React.FC = () => {
-    const navigate = useNavigate();
-    const { loading, error, registerPet, clearError, setError } = usePetStore();
-    const { isAuthenticated } = useStore();
-    const [name, setName] = useState('');
-    const [age, setAge] = useState('');
 
-    // Limpiar errores al montar y desmontar
-    useEffect(() => {
-        clearError();
-        return () => clearError();
-    }, [clearError]);
+export default function RegisterPet() {
+    const registerPet = usePetStore(state => state.registerPet);
+    
 
-    // Redirigir si no está autenticado
-    useEffect(() => {
-        if (!isAuthenticated) {
-            navigate('/');
-        }
-    }, [isAuthenticated, navigate]);
+    const {register, handleSubmit, formState:{errors}, reset} = useForm<Pet>(); 
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        // Validaciones
-        if (!name.trim()) {
-            setError('El nombre es requerido');
-            return;
-        }
-
-        if (!age.trim() || parseInt(age) < 0) {
-            setError('La edad debe ser un número válido mayor o igual a 0');
-            return;
-        }
-
-        try {
-            await registerPet(name, parseInt(age));
-            setName('');
-            setAge('');
-            // No necesitamos estado de éxito, usamos el navigate directamente
-            navigate('/pets');
-        } catch (err) {
-            console.error('Error al registrar mascota:', err);
-            // El error ya se maneja en el store
-        }
-    };
-
-    if (!isAuthenticated) {
-        return <div className="loading-message">Redirigiendo al inicio...</div>;
+    const registerPetHandler = (data: Pet) => {
+        registerPet({
+            name: data.name,
+            age: BigInt(data.age)
+            
+        });
+        reset();
+        alert("Mascota registrada exitosamente");
     }
 
     return (
-        <div className="register-pet">
-            <h2>Registrar Nueva Mascota</h2>
-            {error && <div className="error-message">{error}</div>}
-            <form onSubmit={handleSubmit} className="pet-form">
-                <div className="form-group">
-                    <label htmlFor="name">Nombre:</label>
-                    <input
-                        type="text"
+        <div className="w-full px-5">
+            <h2 className="font-black text-3xl text-center">Seguimiento Mascotas</h2>
+
+            <p className="text-lg mt-5 text-center mb-10">
+                Añade Mascotas y {''}
+                <span className="text-indigo-600 font-bold">Administralos</span>
+            </p>
+
+            <form 
+                className="bg-white shadow-md rounded-lg py-10 px-5 mb-10"
+                noValidate
+                onSubmit={handleSubmit(registerPetHandler)}
+            >
+                <div className="mb-5">
+                    <label htmlFor="name" className="text-sm uppercase font-bold">
+                        Nombre de la Mascota
+                    </label>
+                    <input  
                         id="name"
-                        value={name}
-                        onChange={(e) => {
-                            setName(e.target.value);
-                            clearError(); // Limpiar error al escribir
-                        }}
-                        className="form-input"
-                        disabled={loading}
-                        placeholder="Ingresa el nombre de la mascota"
-                        required
+                        className="w-full p-3 mt-2 border border-gray-300 rounded-md"  
+                        type="text" 
+                        placeholder="Nombre de la Mascota"
+                        {...register('name', {
+                            required: 'El nombre de la mascota es obligatorio'
+                        })} 
                     />
+                    {errors.name && (
+                        <Error>
+                            {errors.name?.message}
+                        </Error>
+                    )}
                 </div>
-                <div className="form-group">
-                    <label htmlFor="age">Edad:</label>
-                    <input
-                        type="number"
+
+                <div className="mb-5">
+                    <label htmlFor="age" className="text-sm uppercase font-bold">
+                        Edad de la Mascota
+                    </label>
+                    <input  
                         id="age"
-                        value={age}
-                        onChange={(e) => {
-                            setAge(e.target.value);
-                            clearError(); // Limpiar error al escribir
-                        }}
-                        className="form-input"
-                        disabled={loading}
-                        placeholder="Ingresa la edad en años"
+                        className="w-full p-3 mt-2 border border-gray-300 rounded-md"  
+                        type="number" 
                         min="0"
-                        required
+                        placeholder="Edad de la Mascota"
+                        {...register('age', {
+                            required: 'La edad de la mascota es obligatoria',
+                            min: {
+                                value: 0,
+                                message: 'La edad debe ser mayor o igual a 0'
+                            }
+                        })} 
                     />
+                    {errors.age && (
+                        <Error>
+                            {errors.age?.message}
+                        </Error>
+                    )}
                 </div>
-                <button 
-                    type="submit" 
-                    disabled={loading || !name.trim() || !age.trim()}
-                    className="submit-button"
-                >
-                    {loading ? 'Registrando...' : 'Registrar Mascota'}
-                </button>
-            </form>
+
+                <input
+                    type="submit"
+                    className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-colors rounded-md"
+                    value='Registrar Mascota'
+                />
+            </form> 
         </div>
     );
-};
+}
 
-export default RegisterPet; 

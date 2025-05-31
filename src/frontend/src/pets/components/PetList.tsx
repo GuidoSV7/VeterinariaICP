@@ -2,29 +2,37 @@ import React, { useEffect } from 'react';
 import { usePetStore } from '../store/usePetStore';
 
 const PetList: React.FC = () => {
-    const { pets, loading, error, fetchPets } = usePetStore();
+    const { pets } = usePetStore();
 
-    useEffect(() => {
-        fetchPets();
-    }, [fetchPets]);
-
-    if (loading) return <div>Cargando mascotas...</div>;
-    if (error) return <div className="error">{error}</div>;
+   
 
     return (
-        <div className="pet-list">
-            <h2>Lista de Mascotas</h2>
-            <div className="pets-grid">
-                {pets.map((pet, index) => (
-                    <div key={index} className="pet-card">
-                        <h3>{pet.name}</h3>
-                        <p>Edad: {pet.age.toString()} años</p>
-                        <p>Dueño: {pet.owner.toString()}</p>
-                    </div>
-                ))}
-            </div>
+        <div className="w-full overflow-y-scroll">
+          {pets.length ? (
+            <>
+              <h2 className="font-black text-3xl text-center">Listado de Mascotas</h2>
+              <p className="text-xl mt-5 mb-10 text-center">
+                Administra tus {''}
+                <span className="text-indigo-600 font-bold">Mascotikas</span>
+              </p>
+              {pets.map(pet => (
+                <h2>{pet.name}</h2>
+                
+              ))}
+            </>
+          ) : (
+            <>
+              <h2 className="font-black text-3xl text-center">No hay Mascotas</h2>
+              <p className="text-xl mt-5 mb-10 text-center">
+                Comienza agregando tus mascotas {''}
+                <span className="text-indigo-600 font-bold">Y aparecerán en este lugar</span>
+              </p>
+    
+            </>
+          )}
+          
         </div>
-    );
+      )
 };
 
 export default PetList; 
