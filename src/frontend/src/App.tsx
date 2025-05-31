@@ -33,7 +33,7 @@ const App: FC = () => {
         </header>
 
         <main>
-          <h1 className='text-3xl font-bold text-red-500'>HOla Probado</h1>
+          
           <Routes>
             <Route path="/" element={
               <div className="welcome">

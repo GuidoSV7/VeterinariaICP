@@ -4,6 +4,7 @@ import { AuthClient } from '@dfinity/auth-client';
 import { Identity } from '@dfinity/agent';
 import { ActorSubclass } from '@dfinity/agent';
 import { _SERVICE } from '../../declarations/backend/backend.did';
+import { Principal } from '@dfinity/principal';
 
 interface State {
   isAuthenticated: boolean;
@@ -12,6 +13,7 @@ interface State {
   name: string;
   backend: ActorSubclass<_SERVICE> | null;
   authClient: AuthClient | null;
+  owner: Principal | null;
 }
 
 interface Actions {
@@ -34,6 +36,7 @@ const useStore = create<Store>((set, get) => ({
   name: "",
   backend: null,
   authClient: null,
+  owner: null,
 
   initAuth: async () => {
     try {
@@ -83,7 +86,8 @@ const useStore = create<Store>((set, get) => ({
             set({ 
               identity, 
               isAuthenticated: true,
-              backend 
+              backend,
+              owner: identity.getPrincipal()
             });
             resolve();
           },
