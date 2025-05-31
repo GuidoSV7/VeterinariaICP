@@ -56,7 +56,7 @@ export const useAuthStore = create<AuthStore>()(devtools((set, get) => ({
       host: enviroment? localhost : productionHost,
     })
 
-    const actor = createActor("uxrrr-q7777-77774-qaaaq-cai", {
+    const actor = createActor(process.env.REACT_APP_CANISTER_ID_BACKEND || '', {
       agent,
     })
     
@@ -75,7 +75,7 @@ export const useAuthStore = create<AuthStore>()(devtools((set, get) => ({
     await authClient.login({
       maxTimeToLive: BigInt(7 * 24 * 60 * 1000 * 1000 * 1000),
       
-      identityProvider: enviroment ? `http://uzt4z-lp777-77774-qaabq-cai.localhost:4943/` : 'https://identity.ic0.app',
+      identityProvider: enviroment ? `http://${process.env.REACT_APP_CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/` : 'https://identity.ic0.app',
       onSuccess: () => {
         const { handleAuthenticated } = get();
         handleAuthenticated(authClient);
