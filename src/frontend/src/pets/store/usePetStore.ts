@@ -192,14 +192,10 @@ export const usePetStore = create<PetStore>()(devtools((set, get) => ({
             console.log("Store: Eliminando mascota en el índice:", id);
             const result = await actor.deletePet(id);
             
-            if (result === "Mascota eliminada correctamente") {
-                // Actualizar la lista de mascotas después de eliminar
                 await get().getAllPets();
                 set({ isLoading: false, error: null });
                 console.log("Store: Mascota eliminada exitosamente");
-            } else {
-                throw new Error(result || "Error desconocido al eliminar mascota");
-            }
+          
         } catch (error) {
             console.error("Store: Error eliminando mascota:", error);
             set({ 
