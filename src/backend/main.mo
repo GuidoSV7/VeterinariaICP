@@ -24,7 +24,7 @@ actor class Backend(){
 
 
 
-  public shared query func getAllPets(): async [Types.Pet] {
+  public shared query func getAllPets(): async [(Text, Types.Pet)] {
     petManager.getAllPets()
   };
 
@@ -37,7 +37,7 @@ actor class Backend(){
     return #ok("Mascota registrada correctamente");
   };
   
-  public shared query func getPetByOwner(owner: Principal): async [Types.Pet] {
+  public shared query func getPetByOwner(owner: Principal): async [(Text, Types.Pet)] {
     if (Principal.isAnonymous(owner)) {
         return [];
     };

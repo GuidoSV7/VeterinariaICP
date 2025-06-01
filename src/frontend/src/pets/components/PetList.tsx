@@ -2,11 +2,20 @@ import React, { useEffect } from 'react';
 import { usePetStore } from '../store/usePetStore';
 
 const PetList: React.FC = () => {
-    const { pets, isLoading, error, getAllPets, clearError } = usePetStore();
+    const { pets, isLoading, error, getAllPets, clearError, deletePet } = usePetStore();
 
     useEffect(() => {
         getAllPets();
     }, []);
+
+    const handleDelete = async (index: number) => {
+        try {
+            await deletePet(index);
+            alert('Mascota eliminada con éxito');
+        } catch (error) {
+            alert('Error al eliminar la mascota');
+        }
+    };
 
     if (isLoading) {
         return (
@@ -74,6 +83,12 @@ const PetList: React.FC = () => {
                       <p className="text-gray-600">
                         <span className="font-medium">Edad:</span> {pet.age.toString()} años
                       </p>
+                      <button
+                        onClick={() => handleDelete(index + 1)}
+                        className="mt-4 w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
+                      >
+                        Eliminar
+                      </button>
                     </div>
                   </div>
                 ))}
