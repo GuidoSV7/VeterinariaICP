@@ -8,7 +8,8 @@ import Pet "Modules/Pet";
 import Name "Modules/Name";
 import NFT "Modules/NFT";
 import User "Modules/User";
-actor {
+
+actor class Backend(){
 
   //Esto lo entendí como Inyeccion 
   let nameManager = Name.NameManager();

@@ -12,8 +12,7 @@
     "frontend": {
       "type": "assets",
       "dependencies": ["backend", "internet_identity"],
-      "source": ["src/frontend/build"],
-      "workspace": "backend-integration-frontend"
+      "source": ["src/frontend/build"]
     },
     "internet_identity": {
       "type": "custom",
