@@ -5,41 +5,22 @@ import Result "mo:base/Result";
 import Debug "mo:base/Debug";
 
 import Pet "Modules/Pet";
-import Name "Modules/Name";
+
 import NFT "Modules/NFT";
-import User "Modules/User";
+
 
 actor class Backend(){
 
   //Esto lo entendí como Inyeccion 
-  let nameManager = Name.NameManager();
-  let userManager = User.UserManager();
   let nftManager = NFT.NFTManager();
   let petManager = Pet.PetManager();
 
-  public shared ({caller}) func addName(name: Text): async Name.AddNameResult {
-    if (Principal.isAnonymous(caller)) return #err("You must be authenticated to add a name");
-    nameManager.addName(name);
-    return #ok();
-  };
 
-  public shared query ({caller}) func getNames(): async Name.GetNamesResult {
-    if (Principal.isAnonymous(caller)) return #err("You must be authenticated to view names");
-    return #ok(nameManager.getNames());
-  };
+ 
 
-  public shared ({caller}) func registerUser(name: Text) : async () {
-    userManager.registerUser(caller, name);
-  };
-
-  public query func getUserById(id: Principal.Principal): async ?Types.User {
-    
-    userManager.getUserById(id);
-  };
-
-  public shared ({caller}) func createNFT(name: Text, description: Text, imageUrl: Text, price: Nat) : async () {
-    nftManager.createNFT(caller, name, description, imageUrl, price);
-  };
+  // public shared ({caller}) func createNFT(name: Text, description: Text, imageUrl: Text, price: Nat) : async () {
+  //   nftManager.createNFT(caller, name, description, imageUrl, price);
+  // };
 
 
 
@@ -47,12 +28,12 @@ actor class Backend(){
     petManager.getAllPets()
   };
 
-  public shared ({caller}) func registerPet(name: Text, age: Nat): async Types.Result<Text> {
+  public shared ({caller}) func registerPet(name: Text, age: Nat, image: Text): async Types.Result<Text> {
     if (Principal.isAnonymous(caller)) {
         return #unauthorized;  
     };
     
-    petManager.registerPet(caller, name, age);
+    petManager.registerPet(caller, name, age, image);
     return #ok("Mascota registrada correctamente");
   };
   
@@ -63,8 +44,7 @@ actor class Backend(){
     
     return petManager.getPetByOwner(owner);
 
-    
-    
+  
   };
 
   

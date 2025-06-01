@@ -17,5 +17,8 @@
     "restart": "dfx stop && dfx start --background --clean && sleep 5 && dfx deploy internet_identity && dfx deploy backend ",
     "dev": "dfx stop && dfx start --background --clean && sleep 5 && dfx deploy ",
     "dev-frontend": "cd src/frontend && npm run start"
+  },
+  "dependencies": {
+    "react-dropzone": "^14.3.8"
   }
 }

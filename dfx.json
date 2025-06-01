@@ -1,6 +1,5 @@
 {
   "canisters": {
-
     "backend": {
       "type": "motoko",
       "main": "src/backend/main.mo",
@@ -11,8 +10,13 @@
     },
     "frontend": {
       "type": "assets",
-      "dependencies": ["backend", "internet_identity"],
-      "source": ["src/frontend/build"]
+      "dependencies": [
+        "backend",
+        "internet_identity"
+      ],
+      "source": [
+        "src/frontend/build"
+      ]
     },
     "internet_identity": {
       "type": "custom",
@@ -24,6 +28,11 @@
           "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
         }
       }
+    }
+  },
+  "defaults": {
+    "build": {
+      "packtool": "mops sources"
     }
   }
 }
