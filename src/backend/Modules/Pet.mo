@@ -5,6 +5,7 @@ import Hash "mo:base/Hash";
 import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 import Buffer "mo:base/Buffer";
+import Debug "mo:base/Debug";
 
 module {
 
@@ -26,6 +27,7 @@ module {
             
         };
             petList.put(generateIdPet(), pet);
+            Debug.print("Mascota Registrada")
             
         };
     

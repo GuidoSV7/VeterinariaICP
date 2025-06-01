@@ -12,6 +12,8 @@ export default function RegisterPet() {
     const {register, handleSubmit, formState:{errors}, reset} = useForm<Pet>(); 
 
     const registerPetHandler = (data: Pet) => {
+        console.log("Datos de la mascota:", data);
+        
         registerPet({
             name: data.name,
             age: BigInt(data.age)

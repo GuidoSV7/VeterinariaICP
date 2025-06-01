@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import { Pet } from '../types/Pet';
 import { backend } from '../../declarations/backend';
-import { AuthClient } from '@dfinity/auth-client';
+
 import { devtools } from 'zustand/middleware';
+import { useAuthStore } from 'authTwo/store/auth.store';
 
 
 type PetStore = {
@@ -18,8 +19,10 @@ type PetStore = {
 export const usePetStore = create<PetStore>()(devtools((set, get) => ({
     pets: [],
 
-    registerPet: (pet: Pet) => {
-        backend.registerPet(pet.name, pet.age).then((result) => {
+    registerPet: async (pet: Pet) => {
+        const { actor } = useAuthStore.getState();
+        console.log('Backend:', backend);
+       await actor.registerPet(pet.name, pet.age).then(() => {
             
             set((state) => ({
                 pets: [...state.pets, pet]
