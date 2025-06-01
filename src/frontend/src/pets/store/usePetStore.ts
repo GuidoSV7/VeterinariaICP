@@ -12,7 +12,7 @@ type PetStore = {
     registerPet: (pet: Pet) => Promise<void>;
     getAllPets: () => Promise<void>;
     getPetsByOwner: (owner: string) => Promise<void>;
-    deletePet: (index: number) => Promise<void>;
+    deletePet: (id: string) => Promise<void>;
     handleImageDrop: (file: File) => void;
     clearError: () => void;
 }
@@ -179,7 +179,7 @@ export const usePetStore = create<PetStore>()(devtools((set, get) => ({
         }
     },
 
-    deletePet: async (index: number) => {
+    deletePet: async (id: string) => {
         const { actor } = useAuthStore.getState();
         
         set({ isLoading: true, error: null });
@@ -189,8 +189,8 @@ export const usePetStore = create<PetStore>()(devtools((set, get) => ({
                 throw new Error("No hay actor disponible - Asegúrate de estar autenticado");
             }
 
-            console.log("Store: Eliminando mascota en el índice:", index);
-            const result = await actor.deletePet(index);
+            console.log("Store: Eliminando mascota en el índice:", id);
+            const result = await actor.deletePet(id);
             
             if (result === "Mascota eliminada correctamente") {
                 // Actualizar la lista de mascotas después de eliminar

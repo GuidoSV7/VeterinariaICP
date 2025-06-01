@@ -51,14 +51,14 @@ module {
             Iter.toArray(Map.entries(petList));
         };
 
-        public func deletePet(petId : Text) : Text {
+        public func deletePet(petId : Text) {
             switch (Map.get(petList, Map.thash, petId)) {
                 case (?pet) {
                     ignore Map.remove(petList, Map.thash, petId);
-                    "Mascota eliminada correctamente";
+                    Debug.print("Mascota eliminada correctamente");
                 };
                 case null {
-                    "Mascota no encontrada";
+                    Debug.print("Mascota no encontrada");
                 };
             };
         };

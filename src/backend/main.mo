@@ -47,5 +47,15 @@ actor class Backend(){
   
   };
 
+  public shared ({caller}) func deletePet(id: Text): async Types.Result<Text> {
+
+    if (Principal.isAnonymous(caller)) {
+        return #unauthorized;
+    };
+    petManager.deletePet(id);
+    return #ok("Mascota eliminada correctamente");
+    
+  };
+
   
 }

@@ -3,14 +3,23 @@ import { usePetStore } from '../store/usePetStore';
 
 const PetList: React.FC = () => {
     const { pets, isLoading, error, getAllPets, clearError, deletePet } = usePetStore();
+    console.log("mascotttass",pets);
+
+    interface PetId{
+      id: string;
+      name: string;
+      age: number;
+      image: string;
+      
+    }
 
     useEffect(() => {
         getAllPets();
     }, []);
 
-    const handleDelete = async (index: number) => {
+    const handleDelete = async (id : string) => {
         try {
-            await deletePet(index);
+            await deletePet(id);
             alert('Mascota eliminada con éxito');
         } catch (error) {
             alert('Error al eliminar la mascota');
@@ -61,9 +70,9 @@ const PetList: React.FC = () => {
                 <span className="text-indigo-600 font-bold">Mascotikas</span>
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {pets.map((pet, index) => (
+                {pets.map((pet) => (
                   <div 
-                    key={index} 
+                    key={pet.id} 
                     className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
                   >
                     {pet.image && (
@@ -84,7 +93,7 @@ const PetList: React.FC = () => {
                         <span className="font-medium">Edad:</span> {pet.age.toString()} años
                       </p>
                       <button
-                        onClick={() => handleDelete(index + 1)}
+                        onClick={() => handleDelete(pet.id ?? "")}
                         className="mt-4 w-full bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
                       >
                         Eliminar
