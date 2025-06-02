@@ -1,161 +1,109 @@
+
 import { create } from 'zustand';
-import { createActor } from '../../declarations/backend';
+import { devtools, persist } from "zustand/middleware";
+
+import { canisterId, createActor } from '../../declarations/backend';
 import { AuthClient } from '@dfinity/auth-client';
-import { Identity } from '@dfinity/agent';
-import { ActorSubclass } from '@dfinity/agent';
-import { _SERVICE } from '../../declarations/backend/backend.did';
-import { Principal } from '@dfinity/principal';
+import { HttpAgent } from '@dfinity/agent';
 
-interface State {
-  isAuthenticated: boolean;
-  identity: Identity | null;
-  names: string[];
-  name: string;
-  backend: ActorSubclass<_SERVICE> | null;
-  authClient: AuthClient | null;
-  owner: Principal | null;
-}
 
-interface Actions {
+type AuthStore = {
+  log: Boolean;
+  authClient : AuthClient | null;
+  actor: any | null;
   initAuth: () => Promise<void>;
+  handleAuthenticated: (authClient: AuthClient) => void;
   login: () => Promise<void>;
   logout: () => Promise<void>;
-  setName: (name: string) => void;
-  addName: () => Promise<void>;
-  getNames: () => Promise<void>;
+  
 }
 
-type Store = State & Actions;
+const enviroment = 'local' === 'local'
+const localhost = "http://localhost:4943"
+const productionHost = "https://ic0.app"
 
-const BACKEND_CANISTER_ID = "uxrrr-q7777-77774-qaaaq-cai";
 
-const useStore = create<Store>((set, get) => ({
-  isAuthenticated: false,
-  identity: null,
-  names: [],
-  name: "",
-  backend: null,
+
+
+export const useAuthStore = create<AuthStore>()(devtools((set, get) => ({
+  log: false,
   authClient: null,
-  owner: null,
+  actor: null,
 
-  initAuth: async () => {
-    try {
-      const authClient = await AuthClient.create();
-      set({ authClient });
+  
+  
+  initAuth: async () => { 
+    const authClient = await AuthClient.create();
+    const { handleAuthenticated } = get(); 
 
-      if (await authClient.isAuthenticated()) {
-        const identity = authClient.getIdentity();
-        const backend = createActor(BACKEND_CANISTER_ID, {
-          agentOptions: {
-            identity,
-            host: "http://127.0.0.1:4943",
-          },
-        });
+
+    if(await authClient.isAuthenticated()) {
+      handleAuthenticated(authClient);
+    }else {
+
+      set((state) => ({
+        authClient
         
-        set({ 
-          identity, 
-          isAuthenticated: true,
-          backend 
-        });
+      }))
+    }
+  },
+
+  handleAuthenticated: async (authClient: AuthClient) => {
+
+    const identity = authClient.getIdentity();
+    const agent = new HttpAgent({
+      identity,
+      host: enviroment? localhost : productionHost,
+    })
+
+    const actor = createActor(process.env.REACT_APP_CANISTER_ID_BACKEND || '', {
+      agent,
+    })
+    
+    set((state) => ({
+      log: true,
+      authClient,
+      actor
+    }))
+
+  },
+
+  login : async () => {
+    console.log('🚀 Login attempt:');
+    console.log('- Environment:', enviroment);
+    const authClient = await AuthClient.create();
+    await authClient.login({
+      maxTimeToLive: BigInt(7 * 24 * 60 * 1000 * 1000 * 1000),
+      
+      identityProvider: enviroment ? `http://${process.env.REACT_APP_CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/` : 'https://identity.ic0.app',
+      onSuccess: () => {
+        const { handleAuthenticated } = get();
+        handleAuthenticated(authClient);
+        console.log(authClient.getIdentity().getPrincipal().toText());
+
+            set((state) => ({
+              log: true
+ 
+            }))
+
       }
-    } catch (error) {
-      console.error("Error initializing auth:", error);
-    }
-  },
+    })
+  }
 
-  login: async () => {
-    const { authClient } = get();
-    if (!authClient) {
-      console.error("Auth client not initialized");
-      return;
-    }
-
-    try {
-      await new Promise<void>((resolve, reject) => {
-        authClient.login({
-          identityProvider: 'http://uzt4z-lp777-77774-qaabq-cai.localhost:4943/',
-          onSuccess: () => {
-            const identity = authClient.getIdentity();
-            const backend = createActor(BACKEND_CANISTER_ID, {
-              agentOptions: {
-                identity,
-                host: "http://127.0.0.1:4943",
-              },
-            });
-            
-            set({ 
-              identity, 
-              isAuthenticated: true,
-              backend,
-              owner: identity.getPrincipal()
-            });
-            resolve();
-          },
-          onError: (error) => {
-            console.error("Login error:", error);
-            reject(error);
-          }
-        });
-      });
-    } catch (error) {
-      console.error("Failed to login:", error);
-    }
-  },
+  ,
 
   logout: async () => {
     const { authClient } = get();
-    if (!authClient) {
-      console.error("Auth client not initialized");
-      return;
-    }
-
-    try {
+    if (authClient) {
       await authClient.logout();
-      set({ 
-        identity: null, 
-        isAuthenticated: false,
-        backend: null 
-      });
-    } catch (error) {
-      console.error("Logout error:", error);
     }
-  },
+        
+    set((state) => ({
+      log: false
+ 
+    }))
+  }
 
-  setName: (name: string) => set({ name }),
 
-  addName: async () => {
-    const { backend, name, getNames } = get();
-    if (!name) {
-      alert("Please provide a name.");
-      return;
-    }
     
-    try {
-      if (!backend) throw new Error("Backend not initialized");
-      
-      const result = await backend.addName(name);
-      if ("ok" in result) {
-        await getNames();
-        set({ name: "" });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  },
-
-  getNames: async () => {
-    const { backend } = get();
-    try {
-      if (!backend) throw new Error("Backend not initialized");
-      
-      const result = await backend.getNames();
-      if ("ok" in result) {
-        set({ names: result.ok });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  },
-}));
-
-export default useStore; 
+})));

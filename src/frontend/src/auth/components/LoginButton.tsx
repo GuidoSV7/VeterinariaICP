@@ -1,8 +1,12 @@
+import { useAuthStore } from 'auth/store/auth.store';
 import { FC } from 'react';
-import useStore from '../store/auth.store';
 
 const LoginButton: FC = () => {
-  const login = useStore(state => state.login);
+
+    const { 
+    login
+
+   } = useAuthStore();
 
   return (
     <button className="auth-button" onClick={login}>

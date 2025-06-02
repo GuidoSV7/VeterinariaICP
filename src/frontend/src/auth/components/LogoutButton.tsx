@@ -1,8 +1,12 @@
+import { useAuthStore } from 'auth/store/auth.store';
 import { FC } from 'react';
-import useStore from '../store/auth.store';
+
 
 const LogoutButton: FC = () => {
-  const logout = useStore(state => state.logout);
+      const { 
+      logout
+  
+     } = useAuthStore();
 
   return (
     <button className="auth-button" onClick={logout}>

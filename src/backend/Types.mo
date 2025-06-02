@@ -10,7 +10,7 @@ module {
       #unauthorized;
   };
 
-  public type ImageObject = [Nat8];
+  
 
   public type Nft = {
     name : Text;
@@ -32,6 +32,7 @@ module {
     name : Text;
     age : Nat;
     owner : Principal;
+    image: Text;
    
   }
 

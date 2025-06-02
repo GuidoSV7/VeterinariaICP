@@ -1,11 +1,11 @@
 import { FC, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
-import LoginButton from './authTwo/components/LoginButton';
-import LogoutButton from './authTwo/components/LogoutButton';
+import LoginButton from './auth/components/LoginButton';
+import LogoutButton from './auth/components/LogoutButton';
 import PetsModule from './pets/PetsModule';
 import logo from './logo.svg';
 import './App.css';
-import { useAuthStore } from 'authTwo/store/auth.store';
+import { useAuthStore } from 'auth/store/auth.store';
 
 const App: FC = () => {
 
@@ -17,7 +17,7 @@ const App: FC = () => {
 
   useEffect(() => {
     initAuth();
-  }, []);
+  }, [initAuth]);
 
 
   return (
